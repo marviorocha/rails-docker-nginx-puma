@@ -1,0 +1,43 @@
+version: '3'
+volumes:
+  postgres_data: {}
+networks:
+    RUBY:
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    restart: always
+    env_file: .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - RUBY
+  app:
+    build: .
+    container_name: ruby
+    env_file: .env
+    command: bundle exec puma -C config/puma.rb
+    environment:
+      - RAILS_ENV=production
+      - RAKE_ENV=production
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/var/www/myapp
+    depends_on:
+      - db
+    networks:
+      - RUBY
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+    links:
+      - app
+    ports:
+      - "80:80"
+    networks:
+      - RUBY
