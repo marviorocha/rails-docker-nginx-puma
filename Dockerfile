@@ -7,15 +7,14 @@ ENV HOME /var/www/myapp
 RUN mkdir -p $HOME
 WORKDIR $HOME
 
-COPY Gemfile $HOME/Gemfile
-COPY Gemfile.lock $HOME/Gemfile.lock
-COPY . $HOME
+COPY Gemfile* $HOME
+COPY . ./
 
 ENV GEM_HOME="/usr/local/bundle"
 ENV PATH $GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
 
-RUN bundle config --global frozen 1
 RUN bundle install
+RUN bundle config --global frozen 1
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
