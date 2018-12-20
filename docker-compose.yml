@@ -1,6 +1,4 @@
 version: '3'
-volumes:
-  postgres_data: {}
 networks:
     RUBY:
 services:
@@ -41,3 +39,5 @@ services:
       - "80:80"
     networks:
       - RUBY
+volumes:
+  postgres_data: {}

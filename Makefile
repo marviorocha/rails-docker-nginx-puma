@@ -3,6 +3,8 @@ RUN := docker-compose run --rm $(APP)
 spec := spec
 env := development
 
+down:
+				docker-compose down
 new:
 				$(RUN) rails new . --database=postgresql
 rails:
